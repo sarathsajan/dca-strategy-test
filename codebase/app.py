@@ -1,6 +1,7 @@
 import requests
 import datetime
 
+
 # List of Coin pairs to check
 symbol_list = ['ethinr', 'adainr', 'linkinr', 'uniinr', 'algoinr', 'nearinr', 'lunainr', 'manainr', 'xlminr', 'dotinr', 'btcinr']
 
@@ -15,8 +16,8 @@ current_market_status_json = current_market_status_raw.json()
 print(datetime.datetime.now(tz=datetime.timezone(offset=datetime.timedelta(hours=5, minutes=30))).strftime("%Y_%m_%d_%H_%M_%S"))
 
 # Loop through each coin pair in the list and
-# print the current price of coin pair present
-# in the symbol list
+# get the current price of coin pair if present then
+# save the price along with symbol and timestamp to a CSV file
 for pair in current_market_status_json:
   if pair['symbol'] in symbol_list:
     print(pair['symbol'], ' \t-', pair['lastPrice'])
