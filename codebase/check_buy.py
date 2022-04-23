@@ -1,0 +1,36 @@
+import csv
+import datetime
+
+# Get list of coin pairs to check
+symbol_list = ['ethinr', 'adainr', 'linkinr', 'uniinr', 'algoinr', 'nearinr', 'lunainr', 'manainr', 'xlminr', 'dotinr', 'btcinr']
+# symbol_list = ['btcinr']
+# with open("symbol_list.csv", 'r', newline='', encoding='utf-8') as symbol_list_file:
+#   symbol_list = (list(csv.reader(symbol_list_file)))[0]
+
+# Read the price data from the CSV file present
+# in the price_data directory.
+for symbol in symbol_list:
+  print('\n',symbol)
+  # Opening the CSV file in read mode and reading
+  # all the hourly data and storing it as list
+  with open('price_data/' + f"{symbol}.csv", 'r', newline='', encoding='utf-8') as price_file:
+    price_data_list = list(csv.reader(price_file))
+    # print(price_data_list, '\n')
+
+  # get the lowest value of the last 7 day rolling window(168 hours or 168 items) in the price_data_list
+  # and compare it with the current price. If the current price is less than or equal to the lowest value
+  # then buy the coin else, do nothing.
+  current_price = float(price_data_list[-1][1])
+  rolling_window_range = 168
+  list_of_price_data_in_rolling_window_range = price_data_list[-rolling_window_range:]
+  list_of_price_in_rolling_window_range = []
+  for price_data in price_data_list[-rolling_window_range:]:
+    list_of_price_in_rolling_window_range.append(float(price_data[1]))
+  lowest_price_in_rolling_window_range = min(list_of_price_in_rolling_window_range)
+  highest_price_in_rolling_window_range = max(list_of_price_in_rolling_window_range)
+  print('min - ', lowest_price_in_rolling_window_range)
+  print('now - ', current_price)
+  print('max - ', highest_price_in_rolling_window_range)
+
+  if current_price <= lowest_price_in_rolling_window_range:
+    print('BUY')
