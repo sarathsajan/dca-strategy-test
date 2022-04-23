@@ -2,8 +2,8 @@ import csv
 import datetime
 
 # Get list of coin pairs to check
-symbol_list = ['ethinr', 'adainr', 'linkinr', 'uniinr', 'algoinr', 'nearinr', 'lunainr', 'manainr', 'xlminr', 'dotinr', 'btcinr']
-# symbol_list = ['btcinr']
+# symbol_list = ['ethinr', 'adainr', 'linkinr', 'uniinr', 'algoinr', 'nearinr', 'lunainr', 'manainr', 'xlminr', 'dotinr', 'btcinr']
+symbol_list = ['btcinr']
 # with open("symbol_list.csv", 'r', newline='', encoding='utf-8') as symbol_list_file:
 #   symbol_list = (list(csv.reader(symbol_list_file)))[0]
 
@@ -34,3 +34,9 @@ for symbol in symbol_list:
 
   if current_price <= lowest_price_in_rolling_window_range:
     print('BUY')
+    amount_per_transaction = 60
+    buy_details = []
+    with open('episodes/' + f"{symbol}_episode.csv", 'a', newline='', encoding='utf-8') as episode_file:
+      # buy_details = [timestamp, amount spent, current price, no. of item bought]
+      buy_details.append([datetime.datetime.now(tz=datetime.timezone(offset=datetime.timedelta(hours=5, minutes=30))).strftime("%Y%m%d%H%M%S"), amount_per_transaction, current_price, round(amount_per_transaction/current_price, 5)])
+      csv.writer(episode_file).writerows(buy_details)
