@@ -3,9 +3,9 @@ import datetime
 
 # Get list of coin pairs to check
 # symbol_list = ['ethinr', 'adainr', 'linkinr', 'uniinr', 'algoinr', 'nearinr', 'lunainr', 'manainr', 'xlminr', 'dotinr', 'btcinr']
-symbol_list = ['btcinr', 'ethinr']
-# with open("symbol_list.csv", 'r', newline='', encoding='utf-8') as symbol_list_file:
-# symbol_list = (list(csv.reader(symbol_list_file)))[0]
+# symbol_list = ['btcinr', 'ethinr']
+with open("symbol_list.csv", 'r', newline='', encoding='utf-8') as symbol_list_file:
+    symbol_list = (list(csv.reader(symbol_list_file)))[0]
 
 # Read the price data from the CSV file present
 # in the price_data directory.
