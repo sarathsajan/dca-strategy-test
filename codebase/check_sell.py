@@ -50,10 +50,11 @@ for symbol in symbol_list:
             sell_details = []
             with open(f"episodes/{symbol}/{symbol}_episode_current.csv", 'a', newline='', encoding='utf-8') as episode_file:
                 # sell_details = [SELL, timestamp, capital gained by selling, current price, no. of items sold]
-                sell_details.append(['SELL', datetime.datetime.now(tz=datetime.timezone(offset=datetime.timedelta(hours=5, minutes=30))).strftime("%Y%m%d%H%M%S"), Z, current_price, round(Z/current_price, 5)])
+                sell_details.append(['SELL', datetime.datetime.now(tz=datetime.timezone(offset=datetime.timedelta(hours=5, minutes=30))).strftime("%Y%m%d%H%M%S"), Z, current_price, Z/current_price])
                 csv.writer(episode_file).writerows(sell_details)
             
-            # copy csv file to another csv file
+            # since the current episode is now finished, copy the current episode csv file to another csv file with timestamp
             shutil.copyfile(f"episodes/{symbol}/{symbol}_episode_current.csv", f"episodes/{symbol}/{symbol}_episode_{datetime.datetime.now(tz=datetime.timezone(offset=datetime.timedelta(hours=5, minutes=30))).strftime('%Y%m%d%H%M%S')}.csv")
+            # and then generate a fresh empty current episode csv file
             with open(f"episodes/{symbol}/{symbol}_episode_current.csv", 'w+', newline='', encoding='utf-8') as episode_file:
                 pass

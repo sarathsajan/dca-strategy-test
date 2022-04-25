@@ -38,5 +38,5 @@ for symbol in symbol_list:
         buy_details = []
         with open(f"episodes/{symbol}/{symbol}_episode_current.csv", 'a', newline='', encoding='utf-8') as episode_file:
             # buy_details = [BUY, timestamp, amount spent, current price, no. of item bought]
-            buy_details.append(['BUY', datetime.datetime.now(tz=datetime.timezone(offset=datetime.timedelta(hours=5, minutes=30))).strftime("%Y%m%d%H%M%S"), amount_per_transaction, current_price, round(amount_per_transaction/current_price, 5)])
+            buy_details.append(['BUY', datetime.datetime.now(tz=datetime.timezone(offset=datetime.timedelta(hours=5, minutes=30))).strftime("%Y%m%d%H%M%S"), amount_per_transaction, current_price, amount_per_transaction/current_price])
             csv.writer(episode_file).writerows(buy_details)
