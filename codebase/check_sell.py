@@ -18,40 +18,42 @@ for symbol in symbol_list:
         episode_buy_details_list = list(csv.reader(episode_file))
         # print(episode_buy_details_list)
     
-    # get the total amount of capital A, spend in the current episode
-    A = sum([float(buy_details[2]) for buy_details in episode_buy_details_list])
-    print(A)
+    # Check SELL condition only if there is a BUY transaction in the current episode
+    if len(episode_buy_details_list) > 0:
+        # get the total amount of capital A, spend in the current episode
+        A = sum([float(buy_details[2]) for buy_details in episode_buy_details_list])
+        print(A)
 
-    # get the total number of items bought N, in the current episode
-    N = sum([float(buy_details[4]) for buy_details in episode_buy_details_list])
-    print(N)
+        # get the total number of items bought N, in the current episode
+        N = sum([float(buy_details[4]) for buy_details in episode_buy_details_list])
+        print(N)
 
-    # profit percentage indicated as fraction 2% meaning 102% meaning 1.02
-    P = 1.02
+        # profit percentage indicated as fraction 3% meaning 103% meaning 1.03
+        P = 1.03
 
-    # after getting P percent profit, the episode portfolio will
-    # reach Z amount of capital
-    Z = A * P
-    print(Z)
+        # after getting P percent profit, the episode portfolio will
+        # reach Z amount of capital
+        Z = A * P
+        print(Z)
 
-    # price to SELL S, to make P percent profit
-    S = Z / N
-    print(S)
+        # price to SELL S, to make P percent profit
+        S = Z / N
+        print(S)
 
-    # opening the CSV file in read mode and reading all the hourly data and
-    # storing it as list. All this to just get the current price
-    with open(f"price_data/{symbol}.csv", 'r', newline='', encoding='utf-8') as price_file:
-        price_data_list = list(csv.reader(price_file))
-    current_price = float(price_data_list[-1][1])
-    if current_price >= S:
-        print('SELL')
-        sell_details = []
-        with open(f"episodes/{symbol}/{symbol}_episode_current.csv", 'a', newline='', encoding='utf-8') as episode_file:
-            # sell_details = [SELL, timestamp, capital gained by selling, current price, no. of items sold]
-            sell_details.append(['SELL', datetime.datetime.now(tz=datetime.timezone(offset=datetime.timedelta(hours=5, minutes=30))).strftime("%Y%m%d%H%M%S"), Z, current_price, round(Z/current_price, 5)])
-            csv.writer(episode_file).writerows(sell_details)
-        
-        # copy csv file to another csv file
-        shutil.copyfile(f"episodes/{symbol}/{symbol}_episode_current.csv", f"episodes/{symbol}/{symbol}_episode_{datetime.datetime.now(tz=datetime.timezone(offset=datetime.timedelta(hours=5, minutes=30))).strftime('%Y%m%d%H%M%S')}.csv")
-        with open(f"episodes/{symbol}/{symbol}_episode_current.csv", 'w+', newline='', encoding='utf-8') as episode_file:
-            pass
+        # opening the CSV file in read mode and reading all the hourly data and
+        # storing it as list. All this to just get the current price
+        with open(f"price_data/{symbol}.csv", 'r', newline='', encoding='utf-8') as price_file:
+            price_data_list = list(csv.reader(price_file))
+        current_price = float(price_data_list[-1][1])
+        if current_price >= S:
+            print('SELL')
+            sell_details = []
+            with open(f"episodes/{symbol}/{symbol}_episode_current.csv", 'a', newline='', encoding='utf-8') as episode_file:
+                # sell_details = [SELL, timestamp, capital gained by selling, current price, no. of items sold]
+                sell_details.append(['SELL', datetime.datetime.now(tz=datetime.timezone(offset=datetime.timedelta(hours=5, minutes=30))).strftime("%Y%m%d%H%M%S"), Z, current_price, round(Z/current_price, 5)])
+                csv.writer(episode_file).writerows(sell_details)
+            
+            # copy csv file to another csv file
+            shutil.copyfile(f"episodes/{symbol}/{symbol}_episode_current.csv", f"episodes/{symbol}/{symbol}_episode_{datetime.datetime.now(tz=datetime.timezone(offset=datetime.timedelta(hours=5, minutes=30))).strftime('%Y%m%d%H%M%S')}.csv")
+            with open(f"episodes/{symbol}/{symbol}_episode_current.csv", 'w+', newline='', encoding='utf-8') as episode_file:
+                pass
