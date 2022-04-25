@@ -26,8 +26,8 @@ for symbol in symbol_list:
     N = sum([float(buy_details[4]) for buy_details in episode_buy_details_list])
     print(N)
 
-    # profit percentage indicated as fraction 10% => 110% => 1.1
-    P = 1.1
+    # profit percentage indicated as fraction 2% meaning 102% meaning 1.02
+    P = 1.02
 
     # after getting P percent profit, the episode portfolio will
     # reach Z amount of capital
