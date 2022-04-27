@@ -8,6 +8,10 @@ import datetime
 with open("symbol_list.csv", 'r', newline='', encoding='utf-8') as symbol_list_file:
     symbol_list = (list(csv.reader(symbol_list_file)))[0]
 
+# Clear the old data present, if any
+with open(f'statistics/statistics.csv', 'w', newline='', encoding='utf-8') as statistics_file:
+    pass
+
 # get the list of completed episode files of each coin pair
 # to consolidate the data
 for symbol in symbol_list:
@@ -15,7 +19,7 @@ for symbol in symbol_list:
     # traverse through each completed episode and extract the necessary data
     # only if there is atleast 1 completed episode for that symbol
     # So if there is atleast 1 completed episode the length of the list will be greater than 1
-    # that id current episode file plus completed episode file
+    # that is the current episode file plus the completed episode file
     if len(episode_file_path_list) > 1:
         episode_data_list = []
         for episode_file_path in episode_file_path_list:
@@ -32,7 +36,9 @@ for symbol in symbol_list:
         total_amount_SELL = sum([float(data[2]) for data in episode_data_list if data[0] == 'SELL'])
 
         # Write the consolidated data to a new csv file
-        with open(f'statistics/{symbol}_statistics.csv', 'w', newline='', encoding='utf-8') as statistics_file:
+        with open(f'statistics/statistics.csv', 'a', newline='', encoding='utf-8') as statistics_file:
             writer = csv.writer(statistics_file)
             # the columns in the statistics file are [ 'DATE', 'BUY', 'SELL'])
-            writer.writerow([datetime.datetime.now(tz=datetime.timezone(offset=datetime.timedelta(hours=5, minutes=30))).strftime("%Y%m%d%H%M%S"), total_amount_BUY, total_amount_SELL])
+            writer.writerow([symbol, datetime.datetime.now(tz=datetime.timezone(offset=datetime.timedelta(hours=5, minutes=30))).strftime("%Y%m%d%H%M%S"), total_amount_BUY, total_amount_SELL])
+
+
