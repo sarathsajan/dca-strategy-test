@@ -21,7 +21,7 @@ for symbol in symbol_list:
     # and compare it with the current price. If the current price is less than or equal to the lowest value
     # then buy the coin else, do nothing.
     current_price = float(price_data_list[-1][1])
-    rolling_window_range = 168
+    rolling_window_range = 167
     list_of_price_data_in_rolling_window_range = price_data_list[-rolling_window_range:]
     list_of_price_in_rolling_window_range = []
     for price_data in price_data_list[-rolling_window_range:]:
