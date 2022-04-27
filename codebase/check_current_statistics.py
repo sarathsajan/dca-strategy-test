@@ -8,9 +8,13 @@ import datetime
 with open("symbol_list.csv", 'r', newline='', encoding='utf-8') as symbol_list_file:
     symbol_list = (list(csv.reader(symbol_list_file)))[0]
 
-# Clear the old data present, if any
+# Clear the old data, if any
 with open(f'statistics/completed_statistics.csv', 'w', newline='', encoding='utf-8') as statistics_file:
-    pass
+    writer = csv.writer(statistics_file)
+    writer.writerow(['Symbol', 'Timestamp', 'total_amount_BUY', 'total_amount_SELL'])
+with open(f'statistics/current_statistics.csv', 'w', newline='', encoding='utf-8') as statistics_file:
+    writer = csv.writer(statistics_file)
+    writer.writerow(['Symbol', 'Timestamp', 'total_amount_BUY', 'total_SOH', 'total_PROFIT', 'total_amount_SELL', 'selling_PRICE_POINT'])
 
 # get the list of completed episode files of each coin pair
 # to consolidate the data
@@ -38,35 +42,31 @@ for symbol in symbol_list:
         # Write the consolidated data to a new csv file
         with open(f'statistics/completed_statistics.csv', 'a', newline='', encoding='utf-8') as statistics_file:
             writer = csv.writer(statistics_file)
-            writer.writerow(['Symbol', 'Timestamp' 'BUY', 'SELL'])
             writer.writerow([symbol, datetime.datetime.now(tz=datetime.timezone(offset=datetime.timedelta(hours=5, minutes=30))).strftime("%Y-%m-%d %H:%M:%S"), total_amount_BUY, total_amount_SELL])
 
 for symbol in symbol_list:
-    episode_file_path = pathlib.Path(f'episodes/{symbol}').glob(f'{symbol}_episode_current.csv')
+    episode_file_path = (list(pathlib.Path(f'episodes/{symbol}').glob(f'{symbol}_episode_current.csv')))[0]
     episode_data_list = []
     with open(episode_file_path, 'r', newline='', encoding='utf-8') as current_episode_file:
-        episode_data_list.append(list(csv.reader(current_episode_file)))
-
+        episode_data_list = (list(csv.reader(current_episode_file)))
+    # check if current episode has data, if data present proceed else skip
     # using the data from the current episode to display total capital spent for BUY,
     # and total capital to be earned from selling along with profit, and the price point at which to SELL
     # BUY
-    total_amount_BUY = sum([float(data[2]) for data in episode_data_list if data[0] == 'BUY'])
-    # STOCK ON HAND
-    total_SOH = sum([float(data[4]) for data in episode_data_list if data[0] == 'BUY'])
-    # PROFIT PERCENT
-    total_PROFIT = 1.01 + (0.002 * len(episode_data_list))
-    # SELL
-    total_amount_SELL = total_amount_BUY * total_PROFIT
-    # PRICE POINT to sell
-    selling_PRICE_POINT = total_amount_SELL / total_SOH
+    if len(episode_data_list) > 0:
+        total_amount_BUY = sum([float(data[2]) for data in episode_data_list if data[0] == 'BUY'])
+        # STOCK ON HAND
+        total_SOH = sum([float(data[4]) for data in episode_data_list if data[0] == 'BUY'])
+        # PROFIT PERCENT
+        total_PROFIT = 1.01 + (0.002 * len(episode_data_list))
+        # SELL
+        total_amount_SELL = total_amount_BUY * total_PROFIT
+        # PRICE POINT to sell
+        selling_PRICE_POINT = total_amount_SELL / total_SOH
 
 
-    # Write the consolidated data to a new csv file
-    with open(f'statistics/current_statistics.csv', 'a', newline='', encoding='utf-8') as statistics_file:
-        writer = csv.writer(statistics_file)
-        writer.writerow(['Symbol', 'Timestamp' 'total_amount_BUY', 'total_SOH', 'total_PROFIT', 'total_amount_SELL', 'selling_PRICE_POINT'])
-        writer.writerow([symbol, datetime.datetime.now(tz=datetime.timezone(offset=datetime.timedelta(hours=5, minutes=30))).strftime("%Y-%m-%d %H:%M:%S"), total_amount_BUY, total_SOH, total_PROFIT, total_amount_SELL, selling_PRICE_POINT])
+        # Write the consolidated data to a new csv file
+        with open(f'statistics/current_statistics.csv', 'a', newline='', encoding='utf-8') as statistics_file:
+            writer = csv.writer(statistics_file)
+            writer.writerow([symbol, datetime.datetime.now(tz=datetime.timezone(offset=datetime.timedelta(hours=5, minutes=30))).strftime("%Y-%m-%d %H:%M:%S"), total_amount_BUY, total_SOH, total_PROFIT, total_amount_SELL, selling_PRICE_POINT])
     
-
-
-
