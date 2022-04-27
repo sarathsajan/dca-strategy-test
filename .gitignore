@@ -132,3 +132,4 @@ dmypy.json
 # custom project specific files
 episodes/
 price_data/
+statistics/

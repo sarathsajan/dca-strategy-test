@@ -20,6 +20,11 @@ for symbol in symbol_list:
 
 # check if nescessary files and sub folders exist in episodes/symbol folder
 # if not, create them
+statistics_folder = pathlib.Path(f"statistics")
+if not statistics_folder.is_dir():
+    statistics_folder.mkdir()
+
+
 for symbol in symbol_list:
     episode_folder = pathlib.Path(f"episodes")
     if not episode_folder.is_dir():
