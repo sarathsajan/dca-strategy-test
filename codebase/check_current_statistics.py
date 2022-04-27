@@ -42,7 +42,7 @@ for symbol in symbol_list:
             writer.writerow([symbol, datetime.datetime.now(tz=datetime.timezone(offset=datetime.timedelta(hours=5, minutes=30))).strftime("%Y-%m-%d %H:%M:%S"), total_amount_BUY, total_amount_SELL])
 
 for symbol in symbol_list:
-    episode_file_path = list(pathlib.Path(f'episodes/{symbol}').glob(f'{symbol}_episode_current.csv'))
+    episode_file_path = pathlib.Path(f'episodes/{symbol}').glob(f'{symbol}_episode_current.csv')
     episode_data_list = []
     with open(episode_file_path, 'r', newline='', encoding='utf-8') as current_episode_file:
         episode_data_list.append(list(csv.reader(current_episode_file)))
