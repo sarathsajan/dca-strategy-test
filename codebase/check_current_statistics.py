@@ -9,7 +9,7 @@ with open("symbol_list.csv", 'r', newline='', encoding='utf-8') as symbol_list_f
     symbol_list = (list(csv.reader(symbol_list_file)))[0]
 
 # Clear the old data present, if any
-with open(f'statistics/statistics.csv', 'w', newline='', encoding='utf-8') as statistics_file:
+with open(f'statistics/completed_statistics.csv', 'w', newline='', encoding='utf-8') as statistics_file:
     pass
 
 # get the list of completed episode files of each coin pair
@@ -36,9 +36,37 @@ for symbol in symbol_list:
         total_amount_SELL = sum([float(data[2]) for data in episode_data_list if data[0] == 'SELL'])
 
         # Write the consolidated data to a new csv file
-        with open(f'statistics/statistics.csv', 'a', newline='', encoding='utf-8') as statistics_file:
+        with open(f'statistics/completed_statistics.csv', 'a', newline='', encoding='utf-8') as statistics_file:
             writer = csv.writer(statistics_file)
-            # the columns in the statistics file are [ 'DATE', 'BUY', 'SELL'])
-            writer.writerow([symbol, datetime.datetime.now(tz=datetime.timezone(offset=datetime.timedelta(hours=5, minutes=30))).strftime("%Y%m%d%H%M%S"), total_amount_BUY, total_amount_SELL])
+            writer.writerow(['Symbol', 'Timestamp' 'BUY', 'SELL'])
+            writer.writerow([symbol, datetime.datetime.now(tz=datetime.timezone(offset=datetime.timedelta(hours=5, minutes=30))).strftime("%Y-%m-%d %H:%M:%S"), total_amount_BUY, total_amount_SELL])
+
+for symbol in symbol_list:
+    episode_file_path = list(pathlib.Path(f'episodes/{symbol}').glob(f'{symbol}_episode_current.csv'))
+    episode_data_list = []
+    with open(episode_file_path, 'r', newline='', encoding='utf-8') as current_episode_file:
+        episode_data_list.append(list(csv.reader(current_episode_file)))
+
+    # using the data from the current episode to display total capital spent for BUY,
+    # and total capital to be earned from selling along with profit, and the price point at which to SELL
+    # BUY
+    total_amount_BUY = sum([float(data[2]) for data in episode_data_list if data[0] == 'BUY'])
+    # STOCK ON HAND
+    total_SOH = sum([float(data[4]) for data in episode_data_list if data[0] == 'BUY'])
+    # PROFIT PERCENT
+    total_PROFIT = 1.01 + (0.002 * len(episode_data_list))
+    # SELL
+    total_amount_SELL = total_amount_BUY * total_PROFIT
+    # PRICE POINT to sell
+    selling_PRICE_POINT = total_amount_SELL / total_SOH
+
+
+    # Write the consolidated data to a new csv file
+    with open(f'statistics/current_statistics.csv', 'a', newline='', encoding='utf-8') as statistics_file:
+        writer = csv.writer(statistics_file)
+        writer.writerow(['Symbol', 'Timestamp' 'total_amount_BUY', 'total_SOH', 'total_PROFIT', 'total_amount_SELL', 'selling_PRICE_POINT'])
+        writer.writerow([symbol, datetime.datetime.now(tz=datetime.timezone(offset=datetime.timedelta(hours=5, minutes=30))).strftime("%Y-%m-%d %H:%M:%S"), total_amount_BUY, total_SOH, total_PROFIT, total_amount_SELL, selling_PRICE_POINT])
+    
+
 
 
