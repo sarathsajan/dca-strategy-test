@@ -31,6 +31,7 @@ for symbol in symbol_list:
         # Profit percentage will dynamically increase as the no. of BUY positions increase.
         # The base profit percentage is 1%
         # Each BUY position will increase profit percentage by 0.0125%
+        # ANY CHANGE HERE MUST ALSO BE MADE IN check_current_statistics.py
         base_p = 1.01
         P = base_p + (0.000125 * len(episode_buy_details_list))
         print('profit percentage - ', P)

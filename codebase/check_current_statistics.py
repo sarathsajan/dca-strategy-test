@@ -58,7 +58,7 @@ for symbol in symbol_list:
         # STOCK ON HAND
         total_SOH = sum([float(data[4]) for data in episode_data_list if data[0] == 'BUY'])
         # PROFIT PERCENT
-        total_PROFIT = 1.01 + (0.002 * len(episode_data_list))
+        total_PROFIT = 1.01 + (0.000125 * len(episode_data_list))
         # SELL
         total_amount_SELL = total_amount_BUY * total_PROFIT
         # PRICE POINT to sell
