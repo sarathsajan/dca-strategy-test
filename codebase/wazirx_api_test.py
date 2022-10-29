@@ -1,8 +1,8 @@
 import ccxt
 
 # provide an api_key and secret_key as keyword arguments
-secret_key = '3tRO01dVziBT39NTxFK7p7Qt6Nsr7FdwzmAa9QwH'
-API_key = 'aC5HuLlLeWOVi1fV3hjmmIVnXH0Py3UfXAmjb21TtcJMSdifmGbzSrP7jN4U7eli'
+secret_key = 'yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy'
+API_key = 'xxxxxxxxxxxxxxxxxxxxxxxxxx'
 
 # connect wazirx
 wazirx = ccxt.wazirx()
