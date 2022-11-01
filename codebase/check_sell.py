@@ -34,14 +34,14 @@ def sell():
             # Profit percentage will dynamically increase as the no. of BUY positions increase.
             # The base profit percentage is 1.01 = 1% profit
             # Each BUY position will increase profit by 0.000125
-            # 01st buy --> 1.01 + (0.000125 * 01) = 1.010125 = 1.0125% profit
-            # 02nd buy --> 1.01 + (0.000125 * 02) = 1.010250 = 1.0250% profit
-            # 04th buy --> 1.01 + (0.000125 * 04) = 1.010500 = 1.0500% profit
-            # 08th buy --> 1.01 + (0.000125 * 08) = 1.011000 = 1.1000% profit
-            # 16th buy --> 1.01 + (0.000125 * 16) = 1.012000 = 1.2000% profit
-            # 32nd buy --> 1.01 + (0.000125 * 32) = 1.014000 = 1.4000% profit
+            # 01st buy --> 1.015 + (0.000125 * 01) = 1.015125 = 1.5125% profit
+            # 02nd buy --> 1.015 + (0.000125 * 02) = 1.015250 = 1.5250% profit
+            # 04th buy --> 1.015 + (0.000125 * 04) = 1.015500 = 1.5500% profit
+            # 08th buy --> 1.015 + (0.000125 * 08) = 1.016000 = 1.6000% profit
+            # 16th buy --> 1.015 + (0.000125 * 16) = 1.017000 = 1.7000% profit
+            # 32nd buy --> 1.015 + (0.000125 * 32) = 1.019000 = 1.9000% profit
             # ANY CHANGE HERE MUST ALSO BE MADE IN check_current_statistics.py code
-            base_p = 1.01
+            base_p = 1.015
             P = base_p + (0.000125 * len(episode_buy_details_list))
             print('profit percentage - ', P)
 
