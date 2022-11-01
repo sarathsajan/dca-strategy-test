@@ -62,7 +62,7 @@ def current_statistics():
             # STOCK ON HAND
             total_SOH = sum([float(data[4]) for data in episode_data_list if data[0] == 'BUY'])
             # PROFIT PERCENT
-            total_PROFIT = 1.015 + (0.000125 * len(episode_data_list)) #should match the base_p value in check_sell.py file
+            total_PROFIT = 1.017 + (0.000125 * len(episode_data_list)) #should match the base_p value in check_sell.py file
             # SELL
             total_amount_SELL = total_amount_BUY * total_PROFIT
             # PRICE POINT to sell
