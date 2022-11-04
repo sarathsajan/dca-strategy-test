@@ -133,5 +133,5 @@ dmypy.json
 episodes/
 price_data/
 statistics/
-wazirx_api_test.py
+codebase/wazirx_api_test.py
 .bak
