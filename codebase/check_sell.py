@@ -32,10 +32,17 @@ def sell():
             print('total number of items bought - ', N)
 
             # Profit percentage will dynamically increase as the no. of BUY positions increase.
-            # The base profit percentage is 1.017 = 1.7% profit
-            # Each BUY position will increase profit by 0.000125
+            # The base profit percentage is calculated by compensating for tax and exchange fee
+            # Each BUY position will increase profit percent by 0.000125
             # ANY CHANGE HERE MUST ALSO BE MADE IN check_current_statistics.py code
-            base_p = 1.017
+            
+            # Tax rate and WazirX fee structure
+            tds_rate = 1
+            maker_fee = 0.2
+            # taker_fee = 0.2
+
+            # base_p = 1.017 --> this is 1.7%
+            base_p = 100 / (100 - tds_rate - maker_fee)
             P = base_p + (0.000125 * len(episode_buy_details_list))
             print('profit percentage - ', P)
 
