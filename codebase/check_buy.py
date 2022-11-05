@@ -63,7 +63,7 @@ def buy():
                     sys.exit('Insufficient fund.')
 
                 # WazirX API call for BUY
-                wazirx.create_order(f'{symbol}/INR', 'limit', 'buy', amount_per_transaction/current_price, current_price)
+                wazirx.create_order(f'{symbol[:3].upper()}/INR', 'limit', 'buy', amount_per_transaction/current_price, current_price)
                 
                 with open(f"episodes/{symbol}/{symbol}_episode_current.csv", 'a', newline='', encoding='utf-8') as episode_file:
                     buy_details.append(['BUY', datetime.datetime.now(tz=datetime.timezone(offset=datetime.timedelta(hours=5, minutes=30))).strftime("%Y%m%d%H%M%S"), amount_per_transaction, current_price, amount_per_transaction/current_price])
@@ -85,7 +85,7 @@ def buy():
                     sys.exit('Insufficient fund.')
 
                 # WazirX API call for BUY
-                wazirx.create_order(f'{symbol}/INR', 'market', 'buy', amount_per_transaction/current_price, current_price)
+                wazirx.create_order(f'{symbol[:3].upper()}/INR', 'market', 'buy', amount_per_transaction/current_price, current_price)
 
                 with open(f"episodes/{symbol}/{symbol}_episode_current.csv", 'a', newline='', encoding='utf-8') as episode_file:
                     # buy_details = [BUY, timestamp, amount spent, price bought at, no. of item bought]

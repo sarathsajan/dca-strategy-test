@@ -73,7 +73,7 @@ def sell():
                 sell_details = []
 
                 # Add Wazirx sell API call here
-                wazirx.create_order(f'{symbol}/INR', 'limit', 'sell', N, current_price)
+                wazirx.create_order(f'{symbol[:3].upper()}/INR', 'limit', 'sell', N, current_price)
                 with open(f"episodes/{symbol}/{symbol}_episode_current.csv", 'a', newline='', encoding='utf-8') as episode_file:
                     # sell_details = [SELL, timestamp, capital gained by selling, current price, no. of items sold]
                     sell_details.append(['SELL', datetime.datetime.now(tz=datetime.timezone(offset=datetime.timedelta(hours=5, minutes=30))).strftime("%Y%m%d%H%M%S"), Z, current_price, N])
