@@ -3,6 +3,7 @@ from check_hourly_price import *
 from check_buy import *
 from check_sell import *
 from check_current_statistics import *
+from wazirx_api_test import *
 import time
 import datetime
 import os
@@ -31,6 +32,8 @@ except:
 print('step 2/5 getting current data (hourly)')
 time.sleep(5)
 hourly_price()
+time.sleep(15)
+test_api()
 time.sleep(10)
 
 try:
