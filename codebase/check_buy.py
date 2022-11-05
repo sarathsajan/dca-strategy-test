@@ -3,7 +3,17 @@
 def buy():
     import csv
     import datetime
+    import sys
+    import ccxt
 
+    from env_vars import env_vars
+    ENVIRONMENT_VARIABLES = env_vars.ENV_VARS()
+
+    # connect wazirx
+    wazirx = ccxt.wazirx()
+    wazirx.apiKey = ENVIRONMENT_VARIABLES['WAZIRX_API_KEY']
+    wazirx.secret = ENVIRONMENT_VARIABLES['WAZIRX_SECRET_KEY']
+    
     # Get list of coin pairs to check
     # symbol_list = ['ethinr', 'adainr', 'linkinr', 'uniinr', 'algoinr', 'nearinr', 'manainr', 'xlminr', 'dotinr', 'btcinr']
     # symbol_list = ['btcinr', 'ethinr']
@@ -46,9 +56,15 @@ def buy():
             if current_price <= lowest_price_in_rolling_window_range:
                 amount_per_transaction = 60
                 buy_details = []
-                # Add here --> the WazirX API call for sufficient fund check
+
+                # WazirX API call for sufficient fund check
+                # print(wazirx.fetchBalance()['INR']['free'])
+                if wazirx.fetchBalance()['INR']['free'] < 70:
+                    sys.exit('Insufficient fund.')
+
                 # WazirX API call for BUY
-                # wazirx.create_order('{symbol}/INR', 'limit', 'buy', amount_per_transaction/current_price, current_price)
+                wazirx.create_order(f'{symbol}/INR', 'limit', 'buy', amount_per_transaction/current_price, current_price)
+                
                 with open(f"episodes/{symbol}/{symbol}_episode_current.csv", 'a', newline='', encoding='utf-8') as episode_file:
                     buy_details.append(['BUY', datetime.datetime.now(tz=datetime.timezone(offset=datetime.timedelta(hours=5, minutes=30))).strftime("%Y%m%d%H%M%S"), amount_per_transaction, current_price, amount_per_transaction/current_price])
                     # buy_details --> ['BUY', timestamp, amount spent, price bought at, no. of item bought]
@@ -62,9 +78,15 @@ def buy():
             if current_price <= price_at_initial_buy:
                 amount_per_transaction = 60
                 buy_details = []
-                # Add here --> the WazirX API call for sufficient fund check
+
+                # WazirX API call for sufficient fund check
+                # print(wazirx.fetchBalance()['INR']['free'])
+                if wazirx.fetchBalance()['INR']['free'] < 70:
+                    sys.exit('Insufficient fund.')
+
                 # WazirX API call for BUY
-                # wazirx.create_order('{symbol}/INR', 'limit', 'buy', amount_per_transaction/current_price, current_price)
+                wazirx.create_order(f'{symbol}/INR', 'market', 'buy', amount_per_transaction/current_price, current_price)
+
                 with open(f"episodes/{symbol}/{symbol}_episode_current.csv", 'a', newline='', encoding='utf-8') as episode_file:
                     # buy_details = [BUY, timestamp, amount spent, price bought at, no. of item bought]
                     buy_details.append(['BUY', datetime.datetime.now(tz=datetime.timezone(offset=datetime.timedelta(hours=5, minutes=30))).strftime("%Y%m%d%H%M%S"), amount_per_transaction, current_price, amount_per_transaction/current_price])

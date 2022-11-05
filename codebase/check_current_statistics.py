@@ -59,12 +59,24 @@ def current_statistics():
         if len(episode_data_list) > 0:
             # BUY
             total_amount_BUY = sum([float(data[2]) for data in episode_data_list if data[0] == 'BUY'])
+            
             # STOCK ON HAND
             total_SOH = sum([float(data[4]) for data in episode_data_list if data[0] == 'BUY'])
+            
             # PROFIT PERCENT
-            total_PROFIT = 1.017 + (0.000125 * len(episode_data_list)) #should match the base_p value in check_sell.py file
+            # Tax rate and WazirX fee structure
+            tds_rate = 1
+            maker_fee = 0.2
+            # taker_fee = 0.2
+            # base_p = 1.017 --> this is 1.7%
+            # base_p = 1.0122 -> this is 1.22%
+            
+            base_p = 100 / (100 - tds_rate - maker_fee)
+            total_PROFIT = base_p + (0.000125 * len(episode_data_list)) #should match the base_p value in check_sell.py file
+            
             # SELL
             total_amount_SELL = total_amount_BUY * total_PROFIT
+            
             # PRICE POINT to sell
             selling_PRICE_POINT = total_amount_SELL / total_SOH
 

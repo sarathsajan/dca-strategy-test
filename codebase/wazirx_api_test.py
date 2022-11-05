@@ -1,4 +1,5 @@
 import ccxt
+import sys
 from env_vars import env_vars
 
 ENVIRONMENT_VARIABLES = env_vars.ENV_VARS()
@@ -8,8 +9,12 @@ wazirx = ccxt.wazirx()
 wazirx.apiKey = ENVIRONMENT_VARIABLES['WAZIRX_API_KEY']
 wazirx.secret = ENVIRONMENT_VARIABLES['WAZIRX_SECRET_KEY']
 
-quantity = 0.9
-price = 60
+quantity = 3
+print(quantity)
+# sys.exit("dfgdsfgsfdg")
+price = 20
 
-# wazirx.create_order('WRX/INR', 'limit', 'sell', quantity, price)
-print(wazirx.fetchBalance()['INR'])
+buy_status = wazirx.create_order('WRX/INR', 'market', 'buy', quantity)
+print(buy_status)
+
+# print(type(wazirx.fetchBalance()['INR']['free']))

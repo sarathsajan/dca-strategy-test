@@ -4,6 +4,15 @@ def sell():
     import csv
     import shutil
     import datetime
+    import ccxt
+
+    from env_vars import env_vars
+    ENVIRONMENT_VARIABLES = env_vars.ENV_VARS()
+
+    # connect wazirx
+    wazirx = ccxt.wazirx()
+    wazirx.apiKey = ENVIRONMENT_VARIABLES['WAZIRX_API_KEY']
+    wazirx.secret = ENVIRONMENT_VARIABLES['WAZIRX_SECRET_KEY']
 
     # Get list of coin pairs to check
     # symbol_list = ['ethinr', 'adainr', 'linkinr', 'uniinr', 'algoinr', 'nearinr', 'manainr', 'xlminr', 'dotinr', 'btcinr']
@@ -62,8 +71,9 @@ def sell():
             current_price = float(price_data_list[-1][1])
             if current_price >= S:
                 sell_details = []
+
                 # Add Wazirx sell API call here
-                # wazirx.create_order('WRX/INR', 'limit', 'sell', N, current_price)
+                wazirx.create_order(f'{symbol}/INR', 'limit', 'sell', N, current_price)
                 with open(f"episodes/{symbol}/{symbol}_episode_current.csv", 'a', newline='', encoding='utf-8') as episode_file:
                     # sell_details = [SELL, timestamp, capital gained by selling, current price, no. of items sold]
                     sell_details.append(['SELL', datetime.datetime.now(tz=datetime.timezone(offset=datetime.timedelta(hours=5, minutes=30))).strftime("%Y%m%d%H%M%S"), Z, current_price, N])
