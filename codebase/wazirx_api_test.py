@@ -14,7 +14,7 @@ print(quantity)
 # sys.exit("dfgdsfgsfdg")
 price = 20
 
-buy_status = wazirx.create_order('WRX/INR', 'market', 'buy', quantity)
-print(buy_status)
+# buy_status = wazirx.create_order('WRX/INR', 'market', 'buy', quantity)
+# print(buy_status)
 
-# print(type(wazirx.fetchBalance()['INR']['free']))
+print(type(wazirx.fetchBalance()['INR']['free']))
