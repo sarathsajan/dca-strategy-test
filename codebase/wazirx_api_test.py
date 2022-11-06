@@ -1,4 +1,5 @@
 def test_api():
+    import sys
     import ccxt
     import time
     from env_vars import env_vars
@@ -18,6 +19,16 @@ def test_api():
     # buy_status = wazirx.create_order('WRX/INR', 'market', 'buy', quantity)
     # print(buy_status)
 
-    print(type(wazirx.fetchBalance()['INR']['free']))
-    time.sleep(10)
-    print(type(wazirx.fetchBalance()['INR']['free']))
+    while True:
+        try:
+            print(wazirx.fetchBalance()['INR']['free'])
+            time.sleep(5)
+            if wazirx.fetchBalance()['INR']['free'] < 70:
+                print('Insufficient fund.')
+                sys.exit()
+            break
+        except SystemExit:
+            print('inside SystemExit except block')
+            sys.exit()
+        except:
+            print('fetchBalance API endpoint failed, retrying again')

@@ -3,6 +3,7 @@
 def buy():
     import csv
     import datetime
+    import time
     import sys
     import ccxt
 
@@ -59,8 +60,19 @@ def buy():
 
                 # WazirX API call for sufficient fund check
                 # print(wazirx.fetchBalance()['INR']['free'])
-                if wazirx.fetchBalance()['INR']['free'] < 70:
-                    sys.exit('Insufficient fund.')
+                while True:
+                    try:
+                        print(wazirx.fetchBalance()['INR']['free'])
+                        time.sleep(5)
+                        if wazirx.fetchBalance()['INR']['free'] < 70:
+                            print('Insufficient fund.')
+                            sys.exit()
+                        break
+                    except SystemExit:
+                        print('inside SystemExit except block')
+                        sys.exit()
+                    except:
+                        print('fetchBalance API endpoint failed, retrying again')
 
                 # WazirX API call for BUY
                 wazirx.create_order(f'{symbol[:-3].upper()}/INR', 'limit', 'buy', amount_per_transaction/current_price, current_price)
@@ -81,8 +93,19 @@ def buy():
 
                 # WazirX API call for sufficient fund check
                 # print(wazirx.fetchBalance()['INR']['free'])
-                if wazirx.fetchBalance()['INR']['free'] < 70:
-                    sys.exit('Insufficient fund.')
+                while True:
+                    try:
+                        print(wazirx.fetchBalance()['INR']['free'])
+                        time.sleep(5)
+                        if wazirx.fetchBalance()['INR']['free'] < 70:
+                            print('Insufficient fund.')
+                            sys.exit()
+                        break
+                    except SystemExit:
+                        print('inside SystemExit except block')
+                        sys.exit()
+                    except:
+                        print('fetchBalance API endpoint failed, retrying again')
 
                 # WazirX API call for BUY
                 wazirx.create_order(f'{symbol[:-3].upper()}/INR', 'market', 'buy', amount_per_transaction/current_price, current_price)
