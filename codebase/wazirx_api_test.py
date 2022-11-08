@@ -14,7 +14,6 @@ def test_api():
     wazirx.secret = ENVIRONMENT_VARIABLES['WAZIRX_SECRET_KEY']
 
     quantity = 3
-    print(quantity)
     # sys.exit("dfgdsfgsfdg")
     price = 20
 

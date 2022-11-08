@@ -45,13 +45,16 @@ def open_orders():
                             # getting all the BUY orders present in the current episode file of the symbol into a list format.
                             with open(f"episodes/{symbol}/{symbol}_episode_current.csv", 'r', newline='', encoding='utf-8') as current_episode_file:
                                 buy_orders_list = list(csv.reader(current_episode_file))
+                                # print(buy_orders_list)
+                                # print(type(buy_orders_list))
 
-                            # deleting the lastest entry of BUY order in the current episode list
+                            # deleting the latest entry of BUY order in the current episode list
                             # since the BUY order was not fulfilled and has now been cancelled.
                             # for that open the current episode file in truncate mode and re-insert
                             # data after popping out (deleting) the latest entry
                             with open(f"episodes/{symbol}/{symbol}_episode_current.csv", 'w', newline='', encoding='utf-8') as current_episode_file:
-                                buy_orders_list = buy_orders_list.pop()
+                                buy_orders_list.pop()
+                                # print(buy_orders_list)
                                 csv.writer(current_episode_file).writerows(buy_orders_list)
                             break
                         except ccxt.OrderNotFound:
