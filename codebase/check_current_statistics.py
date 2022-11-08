@@ -1,4 +1,4 @@
-# run_order : 5
+# run_order : 6
 
 def current_statistics():
     import csv
@@ -47,13 +47,15 @@ def current_statistics():
                 writer = csv.writer(statistics_file)
                 writer.writerow([symbol, datetime.datetime.now(tz=datetime.timezone(offset=datetime.timedelta(hours=5, minutes=30))).strftime("%Y-%m-%d %H:%M:%S"), total_amount_BUY, total_amount_SELL, ((total_amount_SELL/total_amount_BUY)-1)*100])
 
+    # get the list of current episode files of each coin pair
+    # to consolidate the data
     for symbol in symbol_list:
         episode_file_path = (list(pathlib.Path(f'episodes/{symbol}').glob(f'{symbol}_episode_current.csv')))[0]
         episode_data_list = []
         with open(episode_file_path, 'r', newline='', encoding='utf-8') as current_episode_file:
             episode_data_list = (list(csv.reader(current_episode_file)))
 
-        # check if current episode has data, if data present proceed else skip
+        # check if current episode has data, if data present then proceed else skip.
         # using the data from the current episode to display total capital spent for BUY,
         # and total capital to be earned from selling along with profit, and the price point at which to SELL    
         if len(episode_data_list) > 0:

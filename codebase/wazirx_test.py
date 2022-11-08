@@ -17,8 +17,6 @@ price = 20
 # buy_status = wazirx.create_order('WRX/INR', 'market', 'buy', quantity)
 # print(buy_status)
 
-i=5
-
 while True:
     try:
         print(wazirx.fetchBalance()['INR']['free'])
@@ -32,3 +30,6 @@ while True:
         sys.exit()
     except:
         print('fetchBalance API endpoint failed, retrying again')
+
+openOrders = wazirx.fetch_open_orders()
+print(openOrders)

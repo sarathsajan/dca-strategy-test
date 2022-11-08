@@ -1,3 +1,5 @@
+# run_order : 2.5
+
 def test_api():
     import sys
     import ccxt
