@@ -1,5 +1,6 @@
 from check_file_generator import *
 from check_hourly_price import *
+from check_open_orders import *
 from check_buy import *
 from check_sell import *
 from check_current_statistics import *
@@ -35,6 +36,15 @@ hourly_price()
 time.sleep(15)
 test_api()
 time.sleep(10)
+
+try:
+    os.system('cls')
+except:
+    pass
+print('step 3/5 cancelling all pending BUY orders from previous run')
+time.sleep(5)
+open_orders()
+time.sleep(5)
 
 try:
     os.system('cls')
