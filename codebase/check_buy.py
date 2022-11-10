@@ -15,11 +15,28 @@ def buy():
     wazirx.apiKey = ENVIRONMENT_VARIABLES['WAZIRX_API_KEY']
     wazirx.secret = ENVIRONMENT_VARIABLES['WAZIRX_SECRET_KEY']
     
+    # INR amount going to be used for each BUY order
+    amount_per_transaction = 60
+
     # Get list of coin pairs to check
     # symbol_list = ['ethinr', 'adainr', 'linkinr', 'uniinr', 'algoinr', 'nearinr', 'manainr', 'xlminr', 'dotinr', 'btcinr']
     # symbol_list = ['btcinr', 'ethinr']
     with open("symbol_list.csv", 'r', newline='', encoding='utf-8') as symbol_list_file:
         symbol_list = (list(csv.reader(symbol_list_file)))[0]
+
+    # WazirX API call for sufficient fund check
+    # print(wazirx.fetchBalance()['INR']['free'])
+    while True:
+        try:
+            print(wazirx.fetchBalance()['INR']['free'])
+            time.sleep(5)
+            if wazirx.fetchBalance()['INR']['free'] < amount_per_transaction + 10:
+                print('Insufficient fund.')
+                return
+            print('Sufficient fund for transaction.')
+            break
+        except:
+            print('fetchBalance API endpoint failed, retrying again')
 
     # Read the price data from the CSV file present
     # in the price_data directory.
@@ -55,24 +72,7 @@ def buy():
             print('now - ', current_price)
 
             if current_price <= lowest_price_in_rolling_window_range:
-                amount_per_transaction = 60
                 buy_details = []
-
-                # WazirX API call for sufficient fund check
-                # print(wazirx.fetchBalance()['INR']['free'])
-                while True:
-                    try:
-                        print(wazirx.fetchBalance()['INR']['free'])
-                        time.sleep(5)
-                        if wazirx.fetchBalance()['INR']['free'] < 70:
-                            print('Insufficient fund.')
-                            sys.exit()
-                        break
-                    except SystemExit:
-                        print('inside SystemExit except block')
-                        sys.exit()
-                    except:
-                        print('fetchBalance API endpoint failed, retrying again')
 
                 # WazirX API call for BUY
                 wazirx.create_order(f'{symbol[:-3].upper()}/INR', 'limit', 'buy', amount_per_transaction/current_price, current_price)
@@ -88,24 +88,7 @@ def buy():
             price_at_initial_buy = float(current_episode_list[0][3])
 
             if current_price <= price_at_initial_buy:
-                amount_per_transaction = 60
                 buy_details = []
-
-                # WazirX API call for sufficient fund check
-                # print(wazirx.fetchBalance()['INR']['free'])
-                while True:
-                    try:
-                        print(wazirx.fetchBalance()['INR']['free'])
-                        time.sleep(5)
-                        if wazirx.fetchBalance()['INR']['free'] < 70:
-                            print('Insufficient fund.')
-                            sys.exit()
-                        break
-                    except SystemExit:
-                        print('inside SystemExit except block')
-                        sys.exit()
-                    except:
-                        print('fetchBalance API endpoint failed, retrying again')
 
                 # WazirX API call for BUY
                 wazirx.create_order(f'{symbol[:-3].upper()}/INR', 'limit', 'buy', amount_per_transaction/current_price, current_price)
