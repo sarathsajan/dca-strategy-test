@@ -26,10 +26,8 @@ def test_api():
             time.sleep(5)
             if wazirx.fetchBalance()['INR']['free'] < 70:
                 print('Insufficient fund.')
-                sys.exit()
+                return
+            print('Sufficient fund for transaction.')
             break
-        except SystemExit:
-            print('inside SystemExit except block')
-            sys.exit()
         except:
             print('fetchBalance API endpoint failed, retrying again')
