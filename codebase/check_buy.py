@@ -75,13 +75,18 @@ def buy():
                 buy_details = []
 
                 # WazirX API call for BUY
-                wazirx.create_order(f'{symbol[:-3].upper()}/INR', 'limit', 'buy', amount_per_transaction/current_price, current_price)
+                try:
+                    wazirx.create_order(f'{symbol[:-3].upper()}/INR', 'limit', 'buy', amount_per_transaction/current_price, current_price)
                 
-                with open(f"episodes/{symbol}/{symbol}_episode_current.csv", 'a', newline='', encoding='utf-8') as episode_file:
-                    buy_details.append(['BUY', datetime.datetime.now(tz=datetime.timezone(offset=datetime.timedelta(hours=5, minutes=30))).strftime("%Y%m%d%H%M%S"), amount_per_transaction, current_price, amount_per_transaction/current_price])
-                    # buy_details --> ['BUY', timestamp, amount spent, price bought at, no. of item bought]
-                    csv.writer(episode_file).writerows(buy_details)
-                print('Initial BUY')
+                    with open(f"episodes/{symbol}/{symbol}_episode_current.csv", 'a', newline='', encoding='utf-8') as episode_file:
+                        buy_details.append(['BUY', datetime.datetime.now(tz=datetime.timezone(offset=datetime.timedelta(hours=5, minutes=30))).strftime("%Y%m%d%H%M%S"), amount_per_transaction, current_price, amount_per_transaction/current_price])
+                        # buy_details --> ['BUY', timestamp, amount spent, price bought at, no. of item bought]
+                        csv.writer(episode_file).writerows(buy_details)
+                    print('Initial BUY')
+                except Exception as error:
+                    print(error)
+                    print('skipping symbol - ', symbol)
+                    continue
         
         elif len(current_episode_list) > 0:
             current_price = float(price_data_list[-1][1])
@@ -91,10 +96,15 @@ def buy():
                 buy_details = []
 
                 # WazirX API call for BUY
-                wazirx.create_order(f'{symbol[:-3].upper()}/INR', 'limit', 'buy', amount_per_transaction/current_price, current_price)
+                try:
+                    wazirx.create_order(f'{symbol[:-3].upper()}/INR', 'limit', 'buy', amount_per_transaction/current_price, current_price)
 
-                with open(f"episodes/{symbol}/{symbol}_episode_current.csv", 'a', newline='', encoding='utf-8') as episode_file:
-                    # buy_details = [BUY, timestamp, amount spent, price bought at, no. of item bought]
-                    buy_details.append(['BUY', datetime.datetime.now(tz=datetime.timezone(offset=datetime.timedelta(hours=5, minutes=30))).strftime("%Y%m%d%H%M%S"), amount_per_transaction, current_price, amount_per_transaction/current_price])
-                    csv.writer(episode_file).writerows(buy_details)
-                print('Subsequent BUY')
+                    with open(f"episodes/{symbol}/{symbol}_episode_current.csv", 'a', newline='', encoding='utf-8') as episode_file:
+                        # buy_details = [BUY, timestamp, amount spent, price bought at, no. of item bought]
+                        buy_details.append(['BUY', datetime.datetime.now(tz=datetime.timezone(offset=datetime.timedelta(hours=5, minutes=30))).strftime("%Y%m%d%H%M%S"), amount_per_transaction, current_price, amount_per_transaction/current_price])
+                        csv.writer(episode_file).writerows(buy_details)
+                    print('Subsequent BUY')
+                except Exception as error:
+                    print(error)
+                    print('skipping symbol - ', symbol)
+                    continue

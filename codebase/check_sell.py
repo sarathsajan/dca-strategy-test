@@ -5,6 +5,7 @@ def sell():
     import shutil
     import datetime
     import ccxt
+    import time
 
     from env_vars import env_vars
     ENVIRONMENT_VARIABLES = env_vars.ENV_VARS()
@@ -35,10 +36,12 @@ def sell():
             # get the total amount of capital A, spend in the current episode
             A = sum([float(buy_details[2]) for buy_details in episode_buy_details_list])
             print('total amount of capital - ', A)
+            time.sleep(1)
 
             # get the total number of items bought N, in the current episode
             N = sum([float(buy_details[4]) for buy_details in episode_buy_details_list])
             print('total number of items bought - ', N)
+            time.sleep(1)
 
             # Profit percentage will dynamically increase as the no. of BUY positions increase.
             # The base profit percentage is calculated by compensating for tax and exchange fee
@@ -54,15 +57,18 @@ def sell():
             base_p = 100 / (100 - tds_rate - maker_fee)
             P = base_p + (0.000125 * len(episode_buy_details_list))
             print('profit percentage - ', P)
+            time.sleep(1)
 
             # When P percent profit is achieved, the episode portfolio will
             # have reached Z amount of capital
             Z = A * P
             print('capital with profit - ', Z)
+            time.sleep(1)
 
             # The price at which to sell 'S', in order to make P percent profit is given by
             S = Z / N
             print('price to sell at - ', S)
+            time.sleep(1)
 
             # opening the CSV file in read mode and reading all the hourly data and
             # storing it as list. All this to just get the current price
@@ -73,16 +79,18 @@ def sell():
                 sell_details = []
 
                 # Add Wazirx sell API call here
-                wazirx.createOrder(f'{symbol[:-3].upper()}/INR', 'limit', 'sell', N, current_price)
+                try:
+                    wazirx.createOrder(f'{symbol[:-3].upper()}/INR', 'limit', 'sell', N, current_price)
                 
-                with open(f"episodes/{symbol}/{symbol}_episode_current.csv", 'a', newline='', encoding='utf-8') as episode_file:
-                    # sell_details = [SELL, timestamp, capital gained by selling, current price, no. of items sold]
-                    sell_details.append(['SELL', datetime.datetime.now(tz=datetime.timezone(offset=datetime.timedelta(hours=5, minutes=30))).strftime("%Y%m%d%H%M%S"), Z, current_price, N])
-                    csv.writer(episode_file).writerows(sell_details)
-                print('SELL')
-                
-                # since the current episode is now finished, copy the current episode csv file to another csv file with timestamp
-                shutil.copyfile(f"episodes/{symbol}/{symbol}_episode_current.csv", f"episodes/{symbol}/{symbol}_episode_{datetime.datetime.now(tz=datetime.timezone(offset=datetime.timedelta(hours=5, minutes=30))).strftime('%Y%m%d%H%M%S')}.csv")
-                # and then generate a fresh empty current episode csv file
-                with open(f"episodes/{symbol}/{symbol}_episode_current.csv", 'w+', newline='', encoding='utf-8') as episode_file:
-                    pass
+                    with open(f"episodes/{symbol}/{symbol}_episode_current.csv", 'a', newline='', encoding='utf-8') as episode_file:
+                        # sell_details = [SELL, timestamp, capital gained by selling, current price, no. of items sold]
+                        sell_details.append(['SELL', datetime.datetime.now(tz=datetime.timezone(offset=datetime.timedelta(hours=5, minutes=30))).strftime("%Y%m%d%H%M%S"), Z, current_price, N])
+                        csv.writer(episode_file).writerows(sell_details)
+                    print('SELL')
+                    # since the current episode is now finished, copy the current episode csv file to another csv file with timestamp
+                    shutil.copyfile(f"episodes/{symbol}/{symbol}_episode_current.csv", f"episodes/{symbol}/{symbol}_episode_{datetime.datetime.now(tz=datetime.timezone(offset=datetime.timedelta(hours=5, minutes=30))).strftime('%Y%m%d%H%M%S')}.csv")
+                    # and then generate a fresh empty current episode csv file
+                    with open(f"episodes/{symbol}/{symbol}_episode_current.csv", 'w+', newline='', encoding='utf-8') as episode_file:
+                        pass
+                except Exception as error:
+                    print(error)
