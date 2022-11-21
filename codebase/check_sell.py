@@ -80,8 +80,11 @@ def sell():
 
                 # Add Wazirx sell API call here
                 try:
-                    wazirx.createOrder(f'{symbol[:-3].upper()}/INR', 'limit', 'sell', N, current_price)
-                
+                    N_in_wazirx = wazirx.fetchBalance()[symbol[:-3].upper()]['free']
+                    print("difference between N and N_in_wazirx : ", N - N_in_wazirx)
+                    
+                    wazirx.createOrder(f'{symbol[:-3].upper()}/INR', 'limit', 'sell', N_in_wazirx, current_price)
+                    
                     with open(f"episodes/{symbol}/{symbol}_episode_current.csv", 'a', newline='', encoding='utf-8') as episode_file:
                         # sell_details = [SELL, timestamp, capital gained by selling, current price, no. of items sold]
                         sell_details.append(['SELL', datetime.datetime.now(tz=datetime.timezone(offset=datetime.timedelta(hours=5, minutes=30))).strftime("%Y%m%d%H%M%S"), Z, current_price, N])

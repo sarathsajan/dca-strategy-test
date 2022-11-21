@@ -16,12 +16,14 @@ price = 20
 
 # buy_status = wazirx.create_order('WRX/INR', 'market', 'buy', quantity)
 # print(buy_status)
+symbol = 'btcinr'
 
 while True:
     try:
-        print(wazirx.fetchBalance()['INR']['free'])
+        print(wazirx.fetchBalance()[symbol[:-3].upper()]['free'])
+        print(type(wazirx.fetchBalance()[symbol[:-3].upper()]['free']))
         time.sleep(5)
-        if wazirx.fetchBalance()['INR']['free'] < 70:
+        if wazirx.fetchBalance()[symbol[:-3].upper()]['free'] < 70:
             print('Insufficient fund.')
             sys.exit()
         break
