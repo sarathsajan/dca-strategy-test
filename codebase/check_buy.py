@@ -1,16 +1,16 @@
 # run_order : 4
 
 def buy_status():
-    buy_status_flag
-    if buy_status_flag = 
-    buy()
-    pass
+    import requests
+    flag_data = requests.get('https://raw.githubusercontent.com/sarathsajan/dca-strategy-test/main/codebase/flag_data.txt')
+    buy_status_flag = flag_data.text
+    if buy_status_flag == 'Y':
+        buy()
 
 def buy():
     import csv
     import datetime
     import time
-    import sys
     import ccxt
 
     from env_vars import env_vars

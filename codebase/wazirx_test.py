@@ -1,6 +1,6 @@
-import sys
 import ccxt
 import time
+import requests
 from env_vars import env_vars
 
 ENVIRONMENT_VARIABLES = env_vars.ENV_VARS()
@@ -18,6 +18,7 @@ price = 20
 # print(buy_status)
 symbol = 'btcinr'
 
+
 while True:
     try:
         print(wazirx.fetchBalance()[symbol[:-3].upper()]['free'])
@@ -25,13 +26,19 @@ while True:
         time.sleep(5)
         if wazirx.fetchBalance()[symbol[:-3].upper()]['free'] < 70:
             print('Insufficient fund.')
-            sys.exit()
+            # sys.exit()
         break
     except SystemExit:
         print('inside SystemExit except block')
-        sys.exit()
+        break
+        # sys.exit()
     except:
         print('fetchBalance API endpoint failed, retrying again')
 
 openOrders = wazirx.fetch_open_orders()
 print(openOrders)
+
+
+buy_status_flag = requests.get('https://raw.githubusercontent.com/sarathsajan/dca-strategy-test/main/codebase/buy_status_flag.txt')
+print (buy_status_flag.text)
+print (type(buy_status_flag.text))

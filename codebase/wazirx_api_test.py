@@ -1,7 +1,6 @@
 # run_order : 2.5
 
 def test_api():
-    import sys
     import ccxt
     import time
     from env_vars import env_vars
