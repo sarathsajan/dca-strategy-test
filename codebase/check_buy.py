@@ -1,5 +1,11 @@
 # run_order : 4
 
+def buy_status():
+    buy_status_flag
+    if buy_status_flag = 
+    buy()
+    pass
+
 def buy():
     import csv
     import datetime
@@ -91,8 +97,9 @@ def buy():
         elif len(current_episode_list) > 0:
             current_price = float(price_data_list[-1][1])
             price_at_initial_buy = float(current_episode_list[0][3])
+            price_at_latest_buy = float(current_episode_list[len(current_episode_list)-1][3])
 
-            if current_price <= price_at_initial_buy:
+            if current_price <= price_at_latest_buy:
                 buy_details = []
 
                 # WazirX API call for BUY

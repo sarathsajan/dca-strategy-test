@@ -52,7 +52,7 @@ except:
     pass
 print('step 4/5 running conditional checks and creating "BUY limit orders" if conditions are satisfied')
 time.sleep(5)
-buy()
+buy_status()
 time.sleep(5)
 
 try:
