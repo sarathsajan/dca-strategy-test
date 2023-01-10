@@ -5,7 +5,10 @@ def buy_status():
     flag_data = requests.get('https://raw.githubusercontent.com/sarathsajan/dca-strategy-test/main/codebase/flag_data.txt')
     buy_status_flag = flag_data.text
     if buy_status_flag == 'Y':
+        print('Y')
         buy()
+    else:
+        print(buy_status_flag)
 
 def buy():
     import csv
@@ -61,12 +64,12 @@ def buy():
         with open(f"episodes/{symbol}/{symbol}_episode_current.csv", 'r', newline='', encoding='utf-8') as current_episode_file:
             current_episode_list = list(csv.reader(current_episode_file))
         
-        # get the lowest value of the last 7 day rolling window(168 hours or 168 items) in the price_data_list
+        # get the lowest value of the last 3 day rolling window(72 hours or 72 items) in the price_data_list
         # and compare it with the current price. If the current price is less than or equal to the lowest value
         # then buy the coin else, do nothing.
         if len(current_episode_list) == 0:
             current_price = float(price_data_list[-1][1])
-            rolling_window_range = 167
+            rolling_window_range = 71
             # list_of_price_data_in_rolling_window_range = price_data_list[-rolling_window_range:]
             list_of_price_in_rolling_window_range = []
             for price_data in price_data_list[-rolling_window_range:]:
