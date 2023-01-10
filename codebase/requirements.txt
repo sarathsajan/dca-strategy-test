@@ -1,2 +1,2 @@
-requests == 2.27
-ccxt == 1.89
+requests
+ccxt
