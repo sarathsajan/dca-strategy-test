@@ -70,13 +70,19 @@ def buy():
         # then buy the coin else, do nothing.
         if len(current_episode_list) == 0:
             current_price = float(price_data_list[-1][1])
-            rolling_window_range = 300
-            # list_of_price_data_in_rolling_window_range = price_data_list[-rolling_window_range:]
-            list_of_price_in_rolling_window_range = []
-            for price_data in price_data_list[-rolling_window_range:]:
-                list_of_price_in_rolling_window_range.append(float(price_data[1]))
-            sma_3_day = sum(list_of_price_in_rolling_window_range[3*24])/(3*24)
-            sma_12_day = sum(list_of_price_in_rolling_window_range[12*24])/(12*24)
+            sma_3_rolling_window_range = 24*3
+            sma_12_rolling_window_range = 24*12
+
+            list_of_price_in_sma_3_rolling_window_range = []
+            list_of_price_in_sma_12_rolling_window_range = []
+            for price_data in price_data_list[-sma_3_rolling_window_range:]:
+                list_of_price_in_sma_3_rolling_window_range.append(float(price_data[1]))
+            for price_data in price_data_list[-sma_12_rolling_window_range:]:
+                list_of_price_in_sma_12_rolling_window_range.append(float(price_data[1]))
+            print('list_of_price_in_sma_3_rolling_window_range - ', list_of_price_in_sma_3_rolling_window_range)
+            print('list_of_price_in_sma_12_rolling_window_range - ', list_of_price_in_sma_12_rolling_window_range)
+            sma_3_day = sum(list_of_price_in_sma_3_rolling_window_range)/(3*24)
+            sma_12_day = sum(list_of_price_in_sma_12_rolling_window_range)/(12*24)
             print('SMA3  - ', sma_3_day)
             print('SMA12 - ', sma_12_day)
             print('Live - ', current_price)
