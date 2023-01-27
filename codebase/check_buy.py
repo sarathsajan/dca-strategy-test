@@ -11,6 +11,7 @@ def buy_status():
         print(buy_status_flag)
 
 def buy():
+    import statistics
     import csv
     import datetime
     import time
@@ -58,9 +59,9 @@ def buy():
             # print(price_data_list, '\n')
 
         # open the current episode file of the symbol and make the initial buy
-        # if there is no other BUY(file is empty) and the current price is at 7-day low.
+        # if there is no other BUY(file is empty) and the 3-Day SMA is below 12-Day SMA.
         # else if there is an initial BUY already, then new BUYs should have price less than
-        # the initial BUY present in the current episode file.
+        # the previous BUY present in the current episode file.
         with open(f"episodes/{symbol}/{symbol}_episode_current.csv", 'r', newline='', encoding='utf-8') as current_episode_file:
             current_episode_list = list(csv.reader(current_episode_file))
         
@@ -69,18 +70,18 @@ def buy():
         # then buy the coin else, do nothing.
         if len(current_episode_list) == 0:
             current_price = float(price_data_list[-1][1])
-            rolling_window_range = 71
+            rolling_window_range = 300
             # list_of_price_data_in_rolling_window_range = price_data_list[-rolling_window_range:]
             list_of_price_in_rolling_window_range = []
             for price_data in price_data_list[-rolling_window_range:]:
                 list_of_price_in_rolling_window_range.append(float(price_data[1]))
-            lowest_price_in_rolling_window_range = min(list_of_price_in_rolling_window_range)
-            highest_price_in_rolling_window_range = max(list_of_price_in_rolling_window_range)
-            print('min - ', lowest_price_in_rolling_window_range)
-            print('max - ', highest_price_in_rolling_window_range)
-            print('now - ', current_price)
+            sma_3_day = sum(list_of_price_in_rolling_window_range[3*24])/(3*24)
+            sma_12_day = sum(list_of_price_in_rolling_window_range[12*24])/(12*24)
+            print('SMA3  - ', sma_3_day)
+            print('SMA12 - ', sma_12_day)
+            print('Live - ', current_price)
 
-            if current_price <= lowest_price_in_rolling_window_range:
+            if sma_3_day < sma_12_day:
                 buy_details = []
 
                 # WazirX API call for BUY
@@ -99,7 +100,6 @@ def buy():
         
         elif len(current_episode_list) > 0:
             current_price = float(price_data_list[-1][1])
-            price_at_initial_buy = float(current_episode_list[0][3])
             price_at_latest_buy = float(current_episode_list[len(current_episode_list)-1][3])
 
             if current_price <= price_at_latest_buy:
