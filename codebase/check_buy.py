@@ -106,7 +106,9 @@ def buy():
         
         elif len(current_episode_list) > 0:
             current_price = float(price_data_list[-1][1])
+            print('current_price - ', current_price)
             price_at_latest_buy = float(current_episode_list[len(current_episode_list)-1][3])
+            print('price_at_latest_buy - ', price_at_latest_buy)
 
             if current_price <= price_at_latest_buy:
                 buy_details = []
